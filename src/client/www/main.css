@@ -1,0 +1,19 @@
+body {
+  font-size: 13px;
+  line-height: 20px;
+}
+
+#root {
+  padding-bottom: 32px;
+}
+
+.footer {
+  bottom: 0;
+  background-color: #222222;
+  color: #FFF;
+}
+
+.footer-pulse-heart {
+  color: #FF0000;
+  padding-left: 2px;
+}
