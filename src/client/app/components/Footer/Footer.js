@@ -3,7 +3,7 @@ import FooterBadge from './FooterBadge.js';
 
 const Footer = () => (
   <footer className="footer navbar-fixed-bottom">
-      <FooterBadge />
+    <FooterBadge />
   </footer>
 );
 
