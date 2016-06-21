@@ -14,12 +14,28 @@ body {
   color: #FFF;
 }
 
-.footer-pulse-heart {
-  color: #FF0000;
-  padding-left: 2px;
-}
-
 .link {
   cursor: pointer;
 }
 
+.landing-title {
+  font-size: 60px;
+}
+
+.alert-primary {
+  background-color: #008cba;
+  border-color: #008cba;
+  color: #FFF;
+}
+
+.modal .close {
+  color: #FFF;
+}
+
+.input-icon {
+  min-width: 40px;
+}
+
+.typewriter-container {
+  min-height: 28px;
+}

@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Form, FormGroup, FormControl, Col, Row, Button, Panel } from 'react-bootstrap';
 
-const Signin = () => {
+const Signin = ({ handleSignupClick }) => {
+  const header = (<h3>Sign in</h3>);
   return (
     <div className="container text-center">
       <Row>
         <Col className="text-center" smOffset={2} mdOffset={2} sm={8} md={8}>
-          <Panel header={<h3>Signin</h3>}>
+          <Panel className="panel-primary" header={header}>
             <Form horizontal>
               <FormGroup controlId="formHorizontalEmail">
                 <Col sm={2}>
@@ -26,15 +27,14 @@ const Signin = () => {
               </FormGroup>
               <FormGroup>
                 <Col sm={12}>
-                  <Button className="pull-right" type="submit">
-                    Sign in
+                  <Button className="pull-right">
+                    Submit
                   </Button>
                 </Col>
               </FormGroup>
               <FormGroup>
                 <Col sm={12}>
-                  <p><a className="link">Forgot your password?</a></p>
-                  <p>Don't have an account? <a className="link">Sign up</a></p>
+                  <p>Don't have an account? <a className="link" onClick={handleSignupClick} >Sign up</a></p>
                 </Col>
               </FormGroup>
             </Form>
@@ -43,6 +43,10 @@ const Signin = () => {
       </Row>
     </div>
   );
+};
+
+Signin.propTypes = {
+  handleSignupClick: PropTypes.func.isRequired,
 };
 
 export default Signin;
