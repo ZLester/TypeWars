@@ -5,15 +5,17 @@ import App from './components/App';
 import Landing from './components/Landing';
 import About from './components/About';
 import Profile from './components/Profile';
-import NoMatch from './components/NoMatch';
+import Signin from './components/Signin';
+import Play from './components/Play';
 
 render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-      <IndexRoute component={Landing}/>
-      <Route path="about" component={About}/>
-      <Route path="profile" component={Profile}/>
-      <Route path="*" component={NoMatch}/>
+      <IndexRoute component={Landing} />
+      <Route path="/play" component={Play} />
+      <Route path="/profile" component={Profile} />
+      <Route path="/about" component={About} />
+      <Route path="/signin" component={Signin} />
     </Route>
   </Router>
 ), document.getElementById('app'));

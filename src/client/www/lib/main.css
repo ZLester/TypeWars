@@ -1,9 +1,10 @@
 body {
   font-size: 13px;
   line-height: 20px;
+  background-image: url('../assets/type.png');
 }
 
-#root {
+#app {
   padding-bottom: 32px;
 }
 
@@ -17,3 +18,8 @@ body {
   color: #FF0000;
   padding-left: 2px;
 }
+
+.link {
+  cursor: pointer;
+}
+
