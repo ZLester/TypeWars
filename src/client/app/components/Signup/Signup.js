@@ -5,7 +5,7 @@ const Signup = ({ showSignupModal, handleSignupModalClose }) => {
   return (
     <Modal show={showSignupModal} onHide={handleSignupModalClose}>
       <Modal.Header className="alert-primary" bsStyle="alert-danger" closeButton>
-        <Modal.Title>Create Account</Modal.Title>
+        <Modal.Title>Sign up</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Row>
