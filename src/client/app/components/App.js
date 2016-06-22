@@ -17,10 +17,6 @@ class App extends Component {
     this.handleSignupClick = this.handleSignupClick.bind(this);
   }
 
-  componentWillMount() {
-    console.log(socket);
-  }
-
   handleSignupModalClose() {
     this.setState({ showSignupModal: false });
   }
