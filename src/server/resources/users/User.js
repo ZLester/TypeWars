@@ -7,12 +7,22 @@ const userSchema = new mongoose.Schema({
   username: { 
     type: String,
     required: true,
-    unique: true
+    unique: true,
+  },
+  firstname: {
+    type: String,
+  },
+  lastname: {
+    type: String,
+  },
+  created: {
+    type: Date,
+    default: Date.now,
   },
   email: { 
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
@@ -21,6 +31,10 @@ const userSchema = new mongoose.Schema({
   salt: {
     type: String,
   },
+  games: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Games',
+  }]
 });
 
 userSchema.methods.comparePasswords = (candidatePassword, callback) => {
