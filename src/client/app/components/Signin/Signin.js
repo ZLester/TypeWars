@@ -40,7 +40,7 @@ const Signin = ({ handleSignupClick }) => {
 };
 
 Signin.propTypes = {
-  handleSignupClick: PropTypes.func.isRequired,
+  handleSignupClick: PropTypes.func,
 };
 
 export default Signin;
