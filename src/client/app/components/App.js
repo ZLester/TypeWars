@@ -20,11 +20,15 @@ class App extends Component {
       allWords: [],
     };
     this.handleMainInputChange = this.handleMainInputChange.bind(this);
+    this.clearMainInput = this.clearMainInput.bind(this);
     this.handleSignupModalClose = this.handleSignupModalClose.bind(this);
     this.handleSignupClick = this.handleSignupClick.bind(this);
     this.validateMainInput = this.validateMainInput.bind(this);
+    this.validateAnswer = this.validateAnswer.bind(this);
+    this.getMainInputValidationClass = this.getMainInputValidationClass.bind(this);
     this.seedText = this.seedText.bind(this);
     this.getNextWord = this.getNextWord.bind(this);
+    this.endGame = this.endGame.bind(this);
   }
 
   handleSignupModalClose() {
@@ -36,7 +40,9 @@ class App extends Component {
   }
 
   handleMainInputChange(e) {
-    this.setState({ mainInput: e.target.value });
+    this.setState({ mainInput: e.target.value }, () => {
+      this.validateAnswer();
+    });
   }
 
   clearMainInput() {
@@ -44,12 +50,31 @@ class App extends Component {
   }
 
   validateMainInput() {
-    return this.state.currentWord.indexOf(this.state.mainInput) === 0;
+    const mainInput = this.state.mainInput;
+    const currentWordPadded = this.state.currentWord + ' ';
+    return currentWordPadded.indexOf(mainInput) === 0;
+  }
+
+  validateAnswer() {
+    const mainInput = this.state.mainInput;
+    const currentWordPadded = this.state.remainingWords.length ? this.state.currentWord + ' ' : this.state.currentWord;
+    if (mainInput === currentWordPadded) {
+      this.getNextWord();
+      this.clearMainInput();
+    }
+  }
+
+  getMainInputValidationClass() {
+    if (this.state.mainInput === '') {
+      return null;
+    }
+    const valid = this.validateMainInput();
+    return valid ? 'success' : 'error';
   }
 
   seedText() {
     const sentence = retrieveRandomSnippet();
-    const allWords = sentence.split(' ').map(word => word + ' ');
+    const allWords = sentence.split(' ');
     const currentWord = allWords[0];
     const remainingWords = allWords.slice(1);
     this.setState({
@@ -60,14 +85,20 @@ class App extends Component {
     });
   }
 
+  endGame() {
+    this.seedText();
+  }
+
   getNextWord() {
     if (!this.state.remainingWords.length) {
-      return null;
+      return this.endGame();
     }
     const nextWord = this.state.remainingWords[0];
+    const nextIndex = this.state.currentWordIndex + 1;
     const nextRemainingWords = this.state.remainingWords.slice(1);
     this.setState({
       currentWord: nextWord,
+      currentWordIndex: nextIndex,
       remainingWords: nextRemainingWords
     });
   }
@@ -84,10 +115,13 @@ class App extends Component {
           {this.props.children && React.cloneElement(this.props.children, {
             handleSignupClick: this.handleSignupClick,
             handleMainInputChange: this.handleMainInputChange,
+            clearMainInput: this.clearMainInput,
             mainInput: this.state.mainInput,
             playing: this.state.playing,
             seedText: this.seedText,
             getNextWord: this.getNextWord,
+            validateMainInput: this.validateMainInput,
+            getMainInputValidationClass: this.getMainInputValidationClass,
             currentWord: this.state.currentWord,
             currentWordIndex: this.state.currentWordIndex,
             remainingWords: this.state.remainingWords,
