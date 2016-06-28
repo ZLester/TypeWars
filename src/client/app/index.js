@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import App from './components/App';
 import Landing from './components/Landing';
 import About from './components/About';
@@ -9,13 +9,13 @@ import Signin from './components/Signin';
 import Play from './components/Play';
 
 render((
-  <Router history={browserHistory}>
+  <Router history={hashHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Landing} />
-      <Route path="/play" component={Play} />
-      <Route path="/profile" component={Profile} />
-      <Route path="/about" component={About} />
-      <Route path="/signin" component={Signin} />
+      <Route path="play" component={Play} />
+      <Route path="profile" component={Profile} />
+      <Route path="about" component={About} />
+      <Route path="signin" component={Signin} />
     </Route>
   </Router>
 ), document.getElementById('app'));

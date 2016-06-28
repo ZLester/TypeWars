@@ -6,22 +6,16 @@ const Signin = ({ handleSignupClick }) => {
   return (
     <div className="container text-center">
       <Row>
-        <Col className="text-center" smOffset={2} mdOffset={2} sm={8} md={8}>
+        <Col className="text-center" smOffset={3} mdOffset={3} sm={6} md={6}>
           <Panel className="panel-primary" header={header}>
             <Form horizontal>
               <FormGroup controlId="formHorizontalEmail">
-                <Col sm={2}>
-                  Email
-                </Col>
-                <Col sm={10}>
+                <Col sm={12}>
                   <FormControl type="email" placeholder="Email" />
                 </Col>
               </FormGroup>
               <FormGroup controlId="formHorizontalUsername">
-                <Col sm={2}>
-                  Password
-                </Col>
-                <Col sm={10}>
+                <Col sm={12}>
                   <FormControl type="password" placeholder="Password" />
                 </Col>
               </FormGroup>
