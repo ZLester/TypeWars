@@ -1,11 +1,9 @@
-const { STATIC_PATH } = require('../config');
 const userRouter = require('../resources/users/userRouter.js');
 const gameRouter = require('../resources/games/gameRouter.js');
+const { serveIndex } = require('../resources/static/staticRouter.js');
 
-module.exports = app => {
+module.exports = (app, express) => {
   app.use('/api/users', userRouter);
   app.use('/api/games', gameRouter);
-  app.get('*', (req, res) => {
-    res.sendFile(STATIC_PATH + '/index.html');
-  });
+  app.get('*', serveIndex);
 };

@@ -4,7 +4,7 @@ const server = require('http').Server(app);
 
 require('./db');
 require('./middleware')(app, express);
-require('./routes')(app);
+require('./routes')(app, express);
 require('./io')(server);
 
 module.exports = server;
