@@ -18,17 +18,27 @@ class App extends Component {
       currentWordIndex: null,
       remainingWords: null,
       allWords: [],
+      countDown: null,
+      gameTimeStart: null,
+      gameTimeElapsed: 0,
     };
     this.handleMainInputChange = this.handleMainInputChange.bind(this);
-    this.clearMainInput = this.clearMainInput.bind(this);
     this.handleSignupModalClose = this.handleSignupModalClose.bind(this);
     this.handleSignupClick = this.handleSignupClick.bind(this);
-    this.validateMainInput = this.validateMainInput.bind(this);
+    this.clearMainInput = this.clearMainInput.bind(this);
+    this.getMainInputValid = this.getMainInputValid.bind(this);
     this.validateAnswer = this.validateAnswer.bind(this);
     this.getMainInputValidationClass = this.getMainInputValidationClass.bind(this);
     this.seedText = this.seedText.bind(this);
     this.getNextWord = this.getNextWord.bind(this);
+    this.tick = this.tick.bind(this);
+    this.startGame = this.startGame.bind(this);
     this.endGame = this.endGame.bind(this);
+    this.resetGame = this.resetGame.bind(this);
+    this.startTime = this.startTimer.bind(this);
+    this.stopTimer = this.stopTimer.bind(this);
+    this.getElapsedSeconds = this.getElapsedSeconds.bind(this);
+    this.getMainInputPlaceHolder = this.getMainInputPlaceHolder.bind(this);
   }
 
   handleSignupModalClose() {
@@ -49,7 +59,7 @@ class App extends Component {
     this.setState({ mainInput: '' });
   }
 
-  validateMainInput() {
+  getMainInputValid() {
     const mainInput = this.state.mainInput;
     const currentWordPadded = this.state.currentWord + ' ';
     return currentWordPadded.indexOf(mainInput) === 0;
@@ -68,8 +78,16 @@ class App extends Component {
     if (this.state.mainInput === '') {
       return null;
     }
-    const valid = this.validateMainInput();
+    const valid = this.getMainInputValid();
     return valid ? 'success' : 'error';
+  }
+
+  getMainInputDisabled() {
+    return this.getElapsedSeconds() < 3;
+  }
+
+  getMainInputPlaceHolder() {
+    return this.getMainInputDisabled() ? 'Get Ready...' : 'Type Here...';
   }
 
   seedText() {
@@ -85,20 +103,57 @@ class App extends Component {
     });
   }
 
-  endGame() {
-    this.seedText();
+  getElapsedSeconds() {
+    const raw = this.state.gameTimeElapsed;
+    const seconds = Math.floor(raw / 1000);
+    return seconds;
   }
+
+  startTimer() {
+    this.timer = setInterval(this.tick, 100);
+  }
+
+  stopTimer() {
+    clearInterval(this.timer);
+  }
+
+  tick() {
+    this.setState({ gameTimeElapsed: new Date() - this.state.gameTimeStart });
+  }
+
+  startGame() {
+    this.setState({ 
+      gameTimeStart: Date.now(),
+      gameTimeElapsed: 0,
+    }, () => {
+      this.seedText();
+      this.startTimer();
+    });
+  }
+  
+  resetGame() {
+    this.stopTimer();
+  }
+
+  endGame() {
+    const timeTaken = this.getElapsedSeconds();
+    const charactersTyped = this.state.allWords.join(' ').length;
+    const wpm = (charactersTyped / 5) / ( timeTaken / 60 );
+    this.resetGame();
+  }
+
 
   getNextWord() {
     if (!this.state.remainingWords.length) {
-      return this.endGame();
+      this.endGame();
+      return this.startGame();
     }
     const nextWord = this.state.remainingWords[0];
-    const nextIndex = this.state.currentWordIndex + 1;
+    const nextWordIndex = this.state.currentWordIndex + 1;
     const nextRemainingWords = this.state.remainingWords.slice(1);
     this.setState({
       currentWord: nextWord,
-      currentWordIndex: nextIndex,
+      currentWordIndex: nextWordIndex,
       remainingWords: nextRemainingWords
     });
   }
@@ -116,16 +171,22 @@ class App extends Component {
             handleSignupClick: this.handleSignupClick,
             handleMainInputChange: this.handleMainInputChange,
             clearMainInput: this.clearMainInput,
+            startGame: this.startGame,
+            endGame: this.endGame,
+            getNextWord: this.getNextWord,
+            getMainInputValid: this.getMainInputValid,
             mainInput: this.state.mainInput,
             playing: this.state.playing,
-            seedText: this.seedText,
-            getNextWord: this.getNextWord,
-            validateMainInput: this.validateMainInput,
+            countDown: this.state.countDown,
             getMainInputValidationClass: this.getMainInputValidationClass,
+            getMainInputDisabled: this.getMainInputDisabled,
             currentWord: this.state.currentWord,
             currentWordIndex: this.state.currentWordIndex,
             remainingWords: this.state.remainingWords,
+            getElapsedSeconds: this.getElapsedSeconds,
             allWords: this.state.allWords,
+            resetGame: this.resetGame,
+            getMainInputPlaceHolder: this.getMainInputPlaceHolder,
           })}
         </div>
         <Footer />

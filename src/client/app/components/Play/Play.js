@@ -2,19 +2,23 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import { Form, FormGroup, FormControl, Col, Row, Button, Panel } from 'react-bootstrap';
+import GamePanel from '../GamePanel';
+import Timer from '../Timer';
 
 class Play extends Component {
   componentWillMount() {
-    this.props.seedText();
     this.props.clearMainInput();
+    this.props.startGame();
   }
-  componentDidMount() {
-    ReactDOM.findDOMNode(this.refs.mainInput).focus(); 
+  
+  componentWillUnmount() {
+    this.props.resetGame();
   }
-  render() {
-    const wordNodes = this.props.allWords.map((word, index) => {
+
+  createWordNodes() {
+    return this.props.allWords.map((word, index) => {
       const currentWord = this.props.currentWordIndex === index;
-      const valid = this.props.validateMainInput();
+      const valid = this.props.getMainInputValid();
       const wordClasses = classNames({
         currentWord,
         'currentWord-valid': currentWord && valid,
@@ -22,30 +26,29 @@ class Play extends Component {
       });
       return (<span key={index} ><span className={wordClasses}>{word}</span> </span>);
     });
+  }
+
+  render() {
+    const wordNodes = this.createWordNodes();
+    const mainInputDisabled = this.props.getMainInputDisabled();
     const mainInputValidationClass = this.props.getMainInputValidationClass();
+    const mainInputPlaceHolder = this.props.getMainInputPlaceHolder();
+    const elapsedSeconds = this.props.getElapsedSeconds();
     return (
-      <div className="text-center">
-          <Col className="text-center" smOffset={2} mdOffset={2} sm={8} md={8}>
-            <Panel className="panel-primary" header={(<h3>Play</h3>)}>
-              <Form onSubmit={() => {return false;}} horizontal>
-                {wordNodes}
-                <FormGroup 
-                  controlId="formMainInput"
-                  validationState={mainInputValidationClass}
-                >
-                  <Col sm={12}>
-                    <FormControl 
-                      type="text"
-                      ref="mainInput"
-                      placeholder="Type here...."
-                      value={this.props.mainInput}
-                      onChange={this.props.handleMainInputChange}
-                    />
-                  </Col>
-                </FormGroup>
-              </Form>
-            </Panel>
-          </Col>
+      <div>
+        <Col className="text-center" sm={2} md={2}>
+          <Timer elapsedSeconds={elapsedSeconds} />
+        </Col>
+        <Col className="text-center" sm={8} md={8}>
+          <GamePanel 
+            wordNodes={wordNodes}
+            mainInput={this.props.mainInput}
+            mainInputDisabled={mainInputDisabled}
+            mainInputValidationClass={mainInputValidationClass}
+            mainInputPlaceHolder={mainInputPlaceHolder}
+            handleMainInputChange={this.props.handleMainInputChange}
+          />
+        </Col>
       </div>
     );
   }
