@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import App from './components/App';
 import Landing from './components/Landing';
 import About from './components/About';
@@ -9,7 +9,7 @@ import Signin from './components/Signin';
 import Play from './components/Play';
 
 render((
-  <Router history={hashHistory}>
+  <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Landing} />
       <Route path="play" component={Play} />

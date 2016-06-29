@@ -13,7 +13,6 @@ class App extends Component {
       loggedIn: false,
       showSignupModal: false,
       mainInput: '',
-      playing: false,
       currentWord: null,
       currentWordIndex: null,
       remainingWords: null,
@@ -22,8 +21,8 @@ class App extends Component {
       gameTimeStart: null,
       gameTimeElapsed: 0,
     };
-    this.handleMainInputChange = this.handleMainInputChange.bind(this);
     this.handleSignupModalClose = this.handleSignupModalClose.bind(this);
+    this.handleMainInputChange = this.handleMainInputChange.bind(this);
     this.handleSignupClick = this.handleSignupClick.bind(this);
     this.clearMainInput = this.clearMainInput.bind(this);
     this.getMainInputValid = this.getMainInputValid.bind(this);
@@ -51,7 +50,11 @@ class App extends Component {
 
   handleMainInputChange(e) {
     this.setState({ mainInput: e.target.value }, () => {
-      this.validateAnswer();
+      const validAnswer = this.validateAnswer();
+      if (validAnswer) {
+        this.getNextWord();
+        this.clearMainInput();
+      }
     });
   }
 
@@ -68,10 +71,7 @@ class App extends Component {
   validateAnswer() {
     const mainInput = this.state.mainInput;
     const currentWordPadded = this.state.remainingWords.length ? this.state.currentWord + ' ' : this.state.currentWord;
-    if (mainInput === currentWordPadded) {
-      this.getNextWord();
-      this.clearMainInput();
-    }
+    return mainInput === currentWordPadded;
   }
 
   getMainInputValidationClass() {
@@ -176,7 +176,6 @@ class App extends Component {
             getNextWord: this.getNextWord,
             getMainInputValid: this.getMainInputValid,
             mainInput: this.state.mainInput,
-            playing: this.state.playing,
             countDown: this.state.countDown,
             getMainInputValidationClass: this.getMainInputValidationClass,
             getMainInputDisabled: this.getMainInputDisabled,
