@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 
 const userSchema = new mongoose.Schema({
-  username: { 
+  username: {
     type: String,
     required: true,
     unique: true,
@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  email: { 
+  email: {
     type: String,
     required: true,
     unique: true,
@@ -28,32 +28,27 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  salt: {
-    type: String,
-  },
   games: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Games',
-  }]
+  }],
 });
 
-userSchema.methods.comparePasswords = (candidatePassword, callback) => {
+userSchema.methods.comparePasswords = function (candidatePassword) {
   const savedPassword = this.password;
-  bcrypt.compare(candidatePassword, savedPassword)
-    .then(isMatch => callback(null, isMatch))
-    .catch(err => callback(err));
+  return bcrypt.compareAsync(candidatePassword, savedPassword)
+    .then(isMatch => isMatch)
+    .catch(err => err);
 };
 
-userSchema.pre('save', function(next) {
-  const user = this;
-  if (!user.isModified('password')) {
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password')) {
     return next();
   }
-  bcrypt.genSalt(10)
-    .then(salt => bcrypt.hash(user.password, salt, null))
+  bcrypt.genSaltAsync(10)
+    .then(salt => bcrypt.hashAsync(this.password, salt, null))
     .then(hash => {
-      user.password = hash;
-      user.salt = salt;
+      this.password = hash;
       next();
     })
     .catch(err => next(err));

@@ -3,8 +3,14 @@ const User = require('./User');
 exports.createOne = (req, res) => {
   const newUser = req.body;
   User.create(newUser)
-    .then(user => res.json(user))
-    .catch(err => res.json(err));
+    .then(user => {
+      console.log('then block success?');
+      res.json(user);
+    })
+    .catch(err => {
+      console.log('catch block');
+      res.json(err)
+    });
 };
 
 exports.retrieve = (req, res) => {
@@ -27,7 +33,7 @@ exports.updateOne = (req, res) => {
   const options = { new: true, upsert: true };
   User.findByIdAndUpdate(id, updatedProps, options)
     .then(user => res.json(user))
-    .catch(err => res.json(err))
+    .catch(err => res.json(err));
 };
 
 exports.delete = (req, res) => {
@@ -35,7 +41,7 @@ exports.delete = (req, res) => {
   User.remove(query)
     .then(users => res.json(users))
     .catch(err => res.json(err));
-}
+};
 
 exports.deleteOne = (req, res) => {
   const query = { _id: req.params.id};
