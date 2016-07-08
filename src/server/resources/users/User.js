@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
   },
   games: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Games',
+    ref: 'Game',
   }],
 });
 

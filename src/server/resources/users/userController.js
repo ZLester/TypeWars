@@ -3,19 +3,15 @@ const User = require('./User');
 exports.createOne = (req, res) => {
   const newUser = req.body;
   User.create(newUser)
-    .then(user => {
-      console.log('then block success?');
-      res.json(user);
-    })
-    .catch(err => {
-      console.log('catch block');
-      res.json(err)
-    });
+    .then(user => res.json(user))
+    .catch(err => res.json(err));
 };
 
 exports.retrieve = (req, res) => {
   const query = req.query;
   User.find(query)
+    .populate('game')
+    .exec()
     .then(users => res.json(users))
     .catch(err => res.json(err));
 };
@@ -23,6 +19,8 @@ exports.retrieve = (req, res) => {
 exports.retrieveOne = (req, res) => {
   const query = { _id: req.params.id };
   User.findOne(query)
+    .populate('game')
+    .exec()
     .then(user => res.json(user))
     .catch(err => res.json(err));
 };
@@ -32,6 +30,8 @@ exports.updateOne = (req, res) => {
   const updatedProps = req.body;
   const options = { new: true, upsert: true };
   User.findByIdAndUpdate(id, updatedProps, options)
+    .populate('game')
+    .exec()
     .then(user => res.json(user))
     .catch(err => res.json(err));
 };
@@ -46,6 +46,8 @@ exports.delete = (req, res) => {
 exports.deleteOne = (req, res) => {
   const query = { _id: req.params.id};
   User.findOneAndRemove(query)
+    .populate('game')
+    .exec()
     .then(user => res.json(user))
     .catch(err => res.json(err));
 };

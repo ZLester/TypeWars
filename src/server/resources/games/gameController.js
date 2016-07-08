@@ -10,6 +10,8 @@ exports.createOne = (req, res) => {
 exports.retrieve = (req, res) => {
   const query = req.query;
   Game.find(query)
+    .populate('game')
+    .exec()
     .then(games => res.json(games))
     .catch(err => res.json(err));
 };
@@ -17,6 +19,8 @@ exports.retrieve = (req, res) => {
 exports.retrieveOne = (req, res) => {
   const query = { _id: req.params.id };
   Game.findOne(query)
+    .populate('game')
+    .exec()
     .then(game => res.json(game))
     .catch(err => res.json(err));
 };
