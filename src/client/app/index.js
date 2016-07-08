@@ -7,6 +7,7 @@ import About from './components/About';
 import Profile from './components/Profile';
 import Signin from './components/Signin';
 import Play from './components/Play';
+import NotFound from './components/NotFound';
 
 render((
   <Router history={browserHistory}>
@@ -16,6 +17,7 @@ render((
       <Route path="profile" component={Profile} />
       <Route path="about" component={About} />
       <Route path="signin" component={Signin} />
+      <Route path="*" component={NotFound} />
     </Route>
   </Router>
 ), document.getElementById('app'));

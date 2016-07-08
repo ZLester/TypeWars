@@ -2,8 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import NavbarTop from './NavbarTop';
 import Footer from './Footer';
 import Signup from './Signup';
-// import io from 'socket.io-client';
-// const socket = io();
 const { retrieveRandomSnippet } = require('../utils');
 
 class App extends Component {
@@ -64,13 +62,13 @@ class App extends Component {
 
   getMainInputValid() {
     const mainInput = this.state.mainInput;
-    const currentWordPadded = this.state.currentWord + ' ';
+    const currentWordPadded = `${this.state.currentWord} `;
     return currentWordPadded.indexOf(mainInput) === 0;
   }
 
   validateAnswer() {
     const mainInput = this.state.mainInput;
-    const currentWordPadded = this.state.remainingWords.length ? this.state.currentWord + ' ' : this.state.currentWord;
+    const currentWordPadded = this.state.remainingWords.length ? `${this.state.currentWord} ` : this.state.currentWord;
     return mainInput === currentWordPadded;
   }
 
@@ -122,7 +120,7 @@ class App extends Component {
   }
 
   startGame() {
-    this.setState({ 
+    this.setState({
       gameTimeStart: Date.now(),
       gameTimeElapsed: 0,
     }, () => {
@@ -130,7 +128,7 @@ class App extends Component {
       this.startTimer();
     });
   }
-  
+
   resetGame() {
     this.stopTimer();
   }
@@ -138,7 +136,7 @@ class App extends Component {
   endGame() {
     const timeTaken = this.getElapsedSeconds();
     const charactersTyped = this.state.allWords.join(' ').length;
-    const wpm = (charactersTyped / 5) / ( timeTaken / 60 );
+    const wpm = (charactersTyped / 5) / (timeTaken / 60);
     this.resetGame();
   }
 
@@ -154,7 +152,7 @@ class App extends Component {
     this.setState({
       currentWord: nextWord,
       currentWordIndex: nextWordIndex,
-      remainingWords: nextRemainingWords
+      remainingWords: nextRemainingWords,
     });
   }
 
