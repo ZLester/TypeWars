@@ -44,7 +44,7 @@ exports.delete = (req, res) => {
 };
 
 exports.deleteOne = (req, res) => {
-  const query = { _id: req.params.id};
+  const query = { _id: req.params.id };
   User.findOneAndRemove(query)
     .populate('game')
     .exec()

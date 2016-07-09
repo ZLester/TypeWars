@@ -1,26 +1,11 @@
 const User = require('../users/User');
+const Auth = require('./Auth');
 
 exports.login = (req, res) => {
-  const { username, password } = req.body;
-  const query = { username };
-  User.findOne(query)
-    .then(user => {
-      if (!user) {
-        throw new Error('Invalid Username or Password');
-      }
-      return user.comparePasswords(password);
-    })
-    .then(match => {
-      if (!match) {
-        throw new Error('Invalid Username or Password');
-      }
-      res.status(201).json({ message: 'logged in placeholder'});
-    })
-    .catch(err => {
-      res.status(401).json({ error: err.toString() });
-    });
+  const token = Auth.signToken(req.user._id);
+  res.json({ token });
 };
 
 exports.logout = (req, res) => {
-
+  res.json({ token: null });
 };

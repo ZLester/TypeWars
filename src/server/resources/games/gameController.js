@@ -10,7 +10,7 @@ exports.createOne = (req, res) => {
 exports.retrieve = (req, res) => {
   const query = req.query;
   Game.find(query)
-    .populate('game')
+    .populate('User')
     .exec()
     .then(games => res.json(games))
     .catch(err => res.json(err));
@@ -19,7 +19,7 @@ exports.retrieve = (req, res) => {
 exports.retrieveOne = (req, res) => {
   const query = { _id: req.params.id };
   Game.findOne(query)
-    .populate('game')
+    .populate('User')
     .exec()
     .then(game => res.json(game))
     .catch(err => res.json(err));
@@ -28,10 +28,12 @@ exports.retrieveOne = (req, res) => {
 exports.updateOne = (req, res) => {
   const id = req.params.id;
   const updatedProps = req.body;
-  const options = { new: true, upsert: true };
+  const options = { upsert: true };
   Game.findByIdAndUpdate(id, updatedProps, options)
+    .populate('User')
+    .exec()
     .then(game => res.json(game))
-    .catch(err => res.json(err))
+    .catch(err => res.json(err));
 };
 
 exports.delete = (req, res) => {
@@ -39,11 +41,13 @@ exports.delete = (req, res) => {
   Game.remove(query)
     .then(games => res.json(games))
     .catch(err => res.json(err));
-}
+};
 
 exports.deleteOne = (req, res) => {
   const id = req.params.id;
   Game.findOneByIdAndRemove(id)
+    .populate('User')
+    .exec()
     .then(game => res.json(game))
     .catch(err => res.json(err));
 };

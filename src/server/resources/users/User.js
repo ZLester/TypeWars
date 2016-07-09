@@ -1,3 +1,4 @@
+const Game = require('../games/Game');
 const Promise = require('bluebird');
 const bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'));
 const mongoose = require('mongoose');
@@ -34,11 +35,19 @@ const userSchema = new mongoose.Schema({
   }],
 });
 
+userSchema.methods.addGame = function (gameId) {
+  return Game.findById(gameId)
+    .then(game => {
+      this.games.push(game);
+      return this.save();
+    })
+    .then(game => this);
+};
+
 userSchema.methods.comparePasswords = function (candidatePassword) {
   const savedPassword = this.password;
   return bcrypt.compareAsync(candidatePassword, savedPassword)
-    .then(isMatch => isMatch)
-    .catch(err => err);
+    .then(isMatch => isMatch);
 };
 
 userSchema.pre('save', function (next) {
