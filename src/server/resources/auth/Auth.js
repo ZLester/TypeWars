@@ -11,12 +11,12 @@ exports.decodeToken = () => (req, res, next) => {
   checkToken(req, res, next);
 };
 
-exports.setUser = () => (req, res, next) => {
+exports.refreshUser = () => (req, res, next) => {
   const { _id } = req.user;
   User.findById(_id)
     .then(user => {
       if (!user) {
-        throw new Error('Invalid user');
+        throw new Error('Invalid User');
       }
       req.user = user;
       next();
@@ -24,7 +24,7 @@ exports.setUser = () => (req, res, next) => {
     .catch(err => next(err));
 };
 
-exports.unsetUser = () => (req, res, next) => {
+exports.destroyUser = () => (req, res, next) => {
   req.user = null;
   next();
 };

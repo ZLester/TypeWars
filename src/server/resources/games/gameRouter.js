@@ -1,6 +1,8 @@
 const gameRouter = require('express').Router();
 const gameController = require('./gameController');
 
+gameRouter.param('id', gameController.validateId);
+
 gameRouter.route('/')
   .post(gameController.createOne)
   .get(gameController.retrieve)

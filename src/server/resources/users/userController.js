@@ -1,53 +1,61 @@
 const User = require('./User');
 
-exports.createOne = (req, res) => {
+exports.validateId = (req, res, next) => {
+  const id = req.params.id;
+  if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+    return next(new Error('Invalid User ID'));
+  }
+  next();
+};
+
+exports.createOne = (req, res, next) => {
   const newUser = req.body;
   User.create(newUser)
     .then(user => res.json(user))
-    .catch(err => res.json(err));
+    .catch(err => next(err));
 };
 
-exports.retrieve = (req, res) => {
+exports.retrieve = (req, res, next) => {
   const query = req.query;
   User.find(query)
-    .populate('game')
+    .populate('games')
     .exec()
     .then(users => res.json(users))
-    .catch(err => res.json(err));
+    .catch(err => next(err));
 };
 
-exports.retrieveOne = (req, res) => {
-  const query = { _id: req.params.id };
-  User.findOne(query)
-    .populate('game')
+exports.retrieveOne = (req, res, next) => {
+  const id = req.params.id;
+  User.findById(id)
+    .populate('games')
     .exec()
     .then(user => res.json(user))
-    .catch(err => res.json(err));
+    .catch(err => next(err));
 };
 
-exports.updateOne = (req, res) => {
+exports.updateOne = (req, res, next) => {
   const id = req.params.id;
   const updatedProps = req.body;
   const options = { new: true, upsert: true };
   User.findByIdAndUpdate(id, updatedProps, options)
-    .populate('game')
+    .populate('games')
     .exec()
     .then(user => res.json(user))
-    .catch(err => res.json(err));
+    .catch(err => next(err));
 };
 
-exports.delete = (req, res) => {
+exports.delete = (req, res, next) => {
   const query = req.query;
   User.remove(query)
     .then(users => res.json(users))
-    .catch(err => res.json(err));
+    .catch(err => next(err));
 };
 
-exports.deleteOne = (req, res) => {
-  const query = { _id: req.params.id };
-  User.findOneAndRemove(query)
-    .populate('game')
+exports.deleteOne = (req, res, next) => {
+  const id = req.params.id;
+  User.findByIdAndRemove(id)
+    .populate('games')
     .exec()
     .then(user => res.json(user))
-    .catch(err => res.json(err));
+    .catch(err => next(err));
 };
