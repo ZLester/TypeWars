@@ -43,7 +43,10 @@ userSchema.methods.addGame = function addGame(gameId) {
       }
       return game.setPlayer(this._id);
     })
-    .then(() => this.save())
+    .then(game => {
+      this.games.push(game);
+      return this.save();
+    })
     .then(() => this);
 };
 
