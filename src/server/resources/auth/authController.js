@@ -1,4 +1,3 @@
-const User = require('../users/User');
 const Auth = require('./Auth');
 
 exports.login = (req, res) => {

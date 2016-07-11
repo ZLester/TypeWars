@@ -36,7 +36,7 @@ exports.retrieveOne = (req, res, next) => {
 exports.updateOne = (req, res, next) => {
   const id = req.params.id;
   const updatedProps = req.body;
-  const options = { new: true, upsert: true };
+  const options = { upsert: true };
   User.findByIdAndUpdate(id, updatedProps, options)
     .populate('games')
     .exec()

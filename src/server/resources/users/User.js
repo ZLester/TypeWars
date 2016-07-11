@@ -35,22 +35,25 @@ const userSchema = new mongoose.Schema({
   }],
 });
 
-userSchema.methods.addGame = function (gameId) {
+userSchema.methods.addGame = function addGame(gameId) {
   return Game.findById(gameId)
     .then(game => {
-      this.games.push(game);
-      return this.save();
+      if (!game) {
+        throw new Error('Game not found');
+      }
+      return game.setPlayer(this._id);
     })
-    .then(game => this);
+    .then(() => this.save())
+    .then(() => this);
 };
 
-userSchema.methods.comparePasswords = function (candidatePassword) {
+userSchema.methods.comparePasswords = function comparePasswords(candidatePassword) {
   const savedPassword = this.password;
   return bcrypt.compareAsync(candidatePassword, savedPassword)
     .then(isMatch => isMatch);
 };
 
-userSchema.pre('save', function (next) {
+userSchema.pre('save', function userPreSave(next) {
   if (!this.isModified('password')) {
     return next();
   }

@@ -11,12 +11,12 @@ exports.decodeToken = () => (req, res, next) => {
   checkToken(req, res, next);
 };
 
-exports.refreshUser = () => (req, res, next) => {
+exports.setUser = () => (req, res, next) => {
   const { _id } = req.user;
   User.findById(_id)
     .then(user => {
       if (!user) {
-        throw new Error('Invalid User');
+        throw new Error('User not found');
       }
       req.user = user;
       next();
@@ -53,6 +53,5 @@ exports.verifyUser = () => (req, res, next) => {
 
 exports.signToken = id => jwt.sign(
   { _id: id },
-  JWT_SECRET,
-  { expiresInMinutes: JWT_EXPIRES }
+  JWT_SECRET
 );

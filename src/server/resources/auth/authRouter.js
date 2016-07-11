@@ -3,6 +3,6 @@ const authController = require('./authController');
 const Auth = require('./Auth');
 authRouter.route('/')
   .post(Auth.verifyUser(), authController.login)
-  .delete(authController.logout);
+  .delete(Auth.destroyUser(), authController.logout);
 
 module.exports = authRouter;
