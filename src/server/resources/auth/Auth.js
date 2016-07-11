@@ -39,9 +39,9 @@ exports.verifyUser = () => (req, res, next) => {
       if (!user) {
         throw new Error('Invalid Username and/or Password');
       }
-      return [user.comparePasswords(password), user];
+      return [user, user.comparePasswords(password)];
     })
-    .spread((match, user) => {
+    .spread((user, match) => {
       if (!match) {
         throw new Error('Invalid Username and/or Password');
       }
@@ -53,5 +53,6 @@ exports.verifyUser = () => (req, res, next) => {
 
 exports.signToken = id => jwt.sign(
   { _id: id },
-  JWT_SECRET
+  JWT_SECRET,
+  { expiresIn: JWT_EXPIRES }
 );
