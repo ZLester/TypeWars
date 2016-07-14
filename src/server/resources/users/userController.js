@@ -1,13 +1,5 @@
 const User = require('./User');
 
-exports.validateId = (req, res, next) => {
-  const id = req.params.id;
-  if (!id.match(/^[0-9a-fA-F]{24}$/)) {
-    return next(new Error('Invalid User ID'));
-  }
-  next();
-};
-
 exports.createOne = (req, res, next) => {
   const newUser = req.body;
   User.create(newUser)
@@ -31,6 +23,13 @@ exports.retrieveOne = (req, res, next) => {
     .exec()
     .then(user => res.json(user))
     .catch(err => next(err));
+};
+
+exports.retrieveCurrent = (req, res, next) => {
+  if (!req.user) {
+    return next(new Error('Not logged in'));
+  }
+  res.json(req.user);
 };
 
 exports.updateOne = (req, res, next) => {

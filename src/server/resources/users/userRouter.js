@@ -1,7 +1,8 @@
 const userRouter = require('express').Router();
 const userController = require('./userController');
+const { validateId } = require('./userUtils');
 
-userRouter.param('id', userController.validateId);
+userRouter.param('id', validateId);
 
 userRouter.route('/')
   .post(userController.createOne)
@@ -12,5 +13,8 @@ userRouter.route('/:id')
   .get(userController.retrieveOne)
   .put(userController.updateOne)
   .delete(userController.deleteOne);
+
+userRouter.route('/me')
+  .get(userController.retrieveCurrent);
 
 module.exports = userRouter;
