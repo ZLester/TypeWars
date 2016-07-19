@@ -15,7 +15,7 @@ To start the webpack dev server:
 ```
 To create the production bundle:
 ```sh
-* npm run dev
+* npm run build
 ```
 To start the server after creating the production bundle:
 ```sh
